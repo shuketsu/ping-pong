@@ -11,4 +11,9 @@ typedef struct {
 	int score;
 } Paddle;
 
+//funzioni!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void init_ball(Ball *b, int start_x, int start_y);
+void move_ball(Ball *b);
+void reset_paddle(Paddle *p, int start_y);
+
 #endif
