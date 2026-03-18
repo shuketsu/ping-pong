@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include "logic.h"
+#include "menu.h"
 
 int main(){
 
