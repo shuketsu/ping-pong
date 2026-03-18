@@ -1,6 +1,9 @@
 #ifndef LOGIC_H
 #define LOGIC_H
 
+#define WIDTH 80
+#define HEIGHT 25
+
 typedef struct {
 	int x, y;
 	int dx, dy;
