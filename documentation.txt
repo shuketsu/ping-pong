@@ -1,0 +1,84 @@
+#PING PONG
+
+Obiettivi:
+
+   - Apprendere l'utilizzo della libreria ncurses per la gestione dell'interfaccia a caratteri (TUI).
+
+   - Implementare una logica di gioco in tempo reale (game loop) con input non bloccante.
+
+   - Gestire le collisioni tra oggetti dinamici (palla) e statici/controllati (bordi e paddle).
+
+   - Realizzare un sistema di punteggio e una condizione di fine partita.
+
+Strumenti utilizzati:
+
+   - Linguaggio di programmazione: C
+
+   - Libreria grafica: ncurses (per il rendering a terminale e la gestione della tastiera).
+
+   - Compilatore: GCC (GNU Compiler Collection)
+
+Descrizione del problema
+
+Il problema consiste nel simulare un tavolo da gioco in cui due giocatori controllano una barretta (paddle) ciascuno, posizionate ai lati opposti del campo. Una palla si muove all'interno dei limiti definiti; l'obiettivo di ogni giocatore è colpire la palla per rimandarla all'avversario. Se la palla supera la barretta di un giocatore, l'avversario guadagna un punto. La partita termina quando un giocatore raggiunge 6 punti.
+
+Analisi del problema
+
+   - Rendering: Disegnare i bordi, le barrette, la palla e il punteggio ad ogni fotogramma.
+
+   - Input: Leggere i tasti 'A'/'D' per il Giocatore 1 e le frecce direzionali per il Giocatore 2 senza interrompere il movimento della palla.
+
+   - Fisica semplificata: Calcolare il movimento della palla (ball_x+mx,ball_y+my) e invertire la direzione in caso di rimbalzo.
+
+   - Sincronizzazione: Utilizzare un ritardo (timeout) per controllare la velocità di gioco.
+
+Progettazione (strutture dati e funzioni)
+
+Il programma utilizza variabili scalari intere per memorizzare le coordinate e i vettori di movimento. Le funzioni principali sono:
+
+   - ball_start() e angle(): Utilizzano rand() per determinare la direzione iniziale e l'angolo di rimbalzo casuale.
+
+   - bord(): Disegna la cornice rettangolare del campo di gioco.
+
+   - player_bord(): Disegna la barretta del giocatore (lunga 5 caratteri).
+
+   - cleaner(): Fondamentale per cancellare la posizione precedente della palla e delle barrette prima di ridisegnarle (evitando l'effetto "scia").
+
+   - score() e info(): Gestiscono la visualizzazione testuale dei punti e dei comandi.
+
+   - main(): Contiene il ciclo principale, la configurazione di ncurses (initscr, timeout, noecho) e la logica delle collisioni.
+
+Implementazione
+
+L'implementazione si basa su un ciclo while condizionato dai punteggi. All'interno del ciclo:
+
+   - Viene impostato un timeout(130) per rendere il gioco fluido ma giocabile.
+
+   - Il comando switch(ch) gestisce gli input asincroni per spostare i paddle entro i limiti laterali del campo.
+
+   - Le collisioni laterali invertono mx.
+
+   - La collisione con il paddle inverte my e modifica leggermente l'angolo mx per aggiungere varietà al gioco.
+
+   - In caso di "gol", la palla viene resettata al centro e il punteggio aggiornato
+
+Risultati ottenuti:
+
+Il programma permette a due utenti di giocare localmente sulla stessa tastiera. La rilevazione delle collisioni è efficace e il sistema di punteggio funziona correttamente fino alla condizione di uscita. L'interfaccia risulta pulita e i comandi sono reattivi grazie alla configurazione cbreak e keypad.
+
+Problemi riscontrati e soluzioni
+
+  - Problema della scia: Inizialmente, muovendo gli oggetti, i caratteri precedenti rimanevano sullo schermo.
+    Soluzione: Creazione della funzione cleaner che sovrascrive con spazi vuoti le posizioni precedenti prima 
+    dell'aggiornamento.
+
+  - Velocità eccessiva della palla: L'angolo orizzontale (mx) tendeva ad aumentare troppo dopo molti rimbalzi.
+    Soluzione: Inserimento di controlli per limitare il valore di mx tra -10 e 10 e reset forzato della
+    direzione se la palla usciva dai limiti previsti.
+
+  - Blocco dell'input: Inizialmente il programma attendeva un tasto per muovere la palla.
+    Soluzione: Utilizzo di timeout() per rendere getch() non bloccante.
+
+Conclusioni
+
+L'esperienza ha dimostrato come anche con una libreria testuale come ncurses sia possibile gestire logiche di gioco arcade. L'uso corretto delle coordinate cartesiane e la gestione dei buffer video sono competenze fondamentali acquisite durante questo progetto. Possibili sviluppi futuri includono l'implementazione di un'intelligenza artificiale per il Giocatore 2 o l'aumento progressivo della velocità della palla.
